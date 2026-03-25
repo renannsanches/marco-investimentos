@@ -45,12 +45,17 @@ export default function Process() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="process-timeline bg-palladian py-24 lg:py-32">
+    <section ref={sectionRef} className="process-timeline bg-palladian py-[120px]">
+      {/* Gold separator */}
+      <div className="container mx-auto mb-16">
+        <div className="w-full h-[1px] bg-gold/30" />
+      </div>
+
       <div className="container mx-auto text-center mb-16">
         <h2
           data-animate
           className="font-heading font-semibold text-dark-grey mb-4"
-          style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)" }}
+          style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", letterSpacing: "-0.02em" }}
         >
           Como funciona a Marco?
         </h2>

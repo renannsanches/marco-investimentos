@@ -35,14 +35,14 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[250ms] ease ${
         scrolled ? "bg-dark-grey/95 backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4">
         <a href="#inicio" onClick={(e) => { e.preventDefault(); scrollTo("#inicio"); }} aria-label="Marco Investimentos">
           <img
-            src="/images/logo-marco.png"
+            src="/images/logo-marco.svg"
             alt="Marco Investimentos"
             className="h-10 w-auto"
           />
@@ -55,7 +55,7 @@ export default function Header() {
               key={link.href}
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-              className="font-body text-sm text-white-soft/80 hover:text-gold transition-colors duration-200"
+              className="font-body text-sm text-white-soft/80 hover:text-gold transition-colors duration-[250ms] ease"
             >
               {link.label}
             </a>
@@ -63,7 +63,7 @@ export default function Header() {
           <a
             href="#contato"
             onClick={(e) => { e.preventDefault(); scrollTo("#contato"); }}
-            className="font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-2.5 rounded hover:brightness-90 hover:shadow-lg transition-all duration-200"
+            className="font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-2.5 rounded-[4px] hover:brightness-90 transition-all duration-[250ms] ease border border-gold"
           >
             Quero Investir
           </a>
@@ -81,7 +81,7 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 top-0 bg-dark-grey z-40 flex flex-col pt-20 px-8 gap-6 transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-0 top-0 bg-dark-grey z-40 flex flex-col pt-20 px-8 gap-6 transition-transform duration-[250ms] ease lg:hidden ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -90,7 +90,7 @@ export default function Header() {
             key={link.href}
             href={link.href}
             onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-            className="font-heading text-2xl text-white-soft/90 hover:text-gold transition-colors"
+            className="font-heading text-2xl text-white-soft/90 hover:text-gold transition-colors duration-[250ms] ease"
           >
             {link.label}
           </a>
@@ -98,7 +98,7 @@ export default function Header() {
         <a
           href="#contato"
           onClick={(e) => { e.preventDefault(); scrollTo("#contato"); }}
-          className="mt-4 font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-3 rounded text-center"
+          className="mt-4 font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-3 rounded-[4px] text-center border border-gold"
         >
           Quero Investir
         </a>

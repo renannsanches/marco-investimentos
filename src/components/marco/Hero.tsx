@@ -30,38 +30,40 @@ export default function Hero() {
       {/* Pattern overlay */}
       <div className="absolute inset-0 z-[2] bg-pattern opacity-[0.06]" />
 
-      {/* Content */}
-      <div className="relative z-[3] container mx-auto py-32 md:py-0">
-        <p className="font-body text-sm tracking-widest uppercase text-oatmeal mb-6 animate-fade-in-up">
-          Consultório Financeiro · Parceiro XP Investimentos
-        </p>
+      {/* Content — left-aligned, single column, max-width 680px */}
+      <div className="relative z-[3] container mx-auto py-40 md:py-0">
+        <div className="max-w-[680px]">
+          <p className="font-body text-sm tracking-widest uppercase text-oatmeal mb-6 animate-fade-in-up">
+            Consultório Financeiro · Parceiro XP Investimentos
+          </p>
 
-        <h1 className="font-heading font-semibold text-white-soft leading-tight mb-6 animate-fade-in-up animate-delay-150"
-            style={{ fontSize: "clamp(2.8rem, 5vw, 4.5rem)" }}>
-          O nosso DNA é<br />
-          cuidar do seu<br />
-          <span className="text-gold">patrimônio</span>
-        </h1>
+          <h1 className="font-heading font-semibold text-white-soft leading-tight mb-6 animate-fade-in-up animate-delay-150"
+              style={{ fontSize: "clamp(2.8rem, 5vw, 4.5rem)", letterSpacing: "-0.02em" }}>
+            O nosso DNA é<br />
+            cuidar do seu<br />
+            <span className="text-gold">patrimônio</span>
+          </h1>
 
-        <p className="font-body text-lg text-white-soft/80 max-w-md mb-10 animate-fade-in-up animate-delay-300">
-          Oferecendo um serviço transparente<br />
-          e alinhado aos seus interesses.
-        </p>
+          <p className="font-body text-lg text-white-soft/80 max-w-md mb-10 animate-fade-in-up animate-delay-300">
+            Oferecendo um serviço transparente<br />
+            e alinhado aos seus interesses.
+          </p>
 
-        <a
-          href="#contato"
-          onClick={(e) => { e.preventDefault(); document.querySelector("#contato")?.scrollIntoView({ behavior: "smooth" }); }}
-          className="inline-block font-body font-semibold text-xs uppercase tracking-widest border-[1.5px] border-gold text-gold px-8 py-3 rounded hover:bg-gold hover:text-dark-grey transition-all duration-250 animate-fade-in-up animate-delay-450"
-        >
-          Abrir uma conta
-        </a>
+          <a
+            href="#contato"
+            onClick={(e) => { e.preventDefault(); document.querySelector("#contato")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="inline-block font-body font-semibold text-xs uppercase tracking-widest border border-gold text-gold px-8 py-3 rounded-[4px] hover:bg-gold hover:text-dark-grey transition-all duration-[250ms] ease animate-fade-in-up animate-delay-450"
+          >
+            Abrir uma conta
+          </a>
 
-        <button
-          onClick={scrollToAbout}
-          className="block mt-16 text-oatmeal/60 hover:text-gold transition-colors text-sm font-body animate-fade-in-up animate-delay-450"
-        >
-          ↓ Conheça a Marco
-        </button>
+          <button
+            onClick={scrollToAbout}
+            className="block mt-16 text-oatmeal/60 hover:text-gold transition-colors duration-[250ms] ease text-sm font-body animate-fade-in-up animate-delay-450"
+          >
+            ↓ Conheça a Marco
+          </button>
+        </div>
       </div>
     </section>
   );
