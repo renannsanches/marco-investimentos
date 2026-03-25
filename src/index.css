@@ -121,6 +121,136 @@
   background-size: 80px 40px;
 }
 
+/* ===== Process Timeline ===== */
+.process-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.process-line-bg {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: hsl(var(--color-oatmeal));
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.process-line-fill {
+  height: 100%;
+  width: 0;
+  background: hsl(var(--color-gold));
+  border-radius: 2px;
+  transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.is-active .process-line-fill {
+  width: 100%;
+}
+
+.process-step {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.process-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: hsl(var(--color-oatmeal));
+  border: 4px solid hsl(var(--color-palladian));
+  transition: background 0.4s ease;
+  flex-shrink: 0;
+}
+
+.is-active .process-step:nth-child(2) .process-dot { transition-delay: 200ms; }
+.is-active .process-step:nth-child(3) .process-dot { transition-delay: 700ms; }
+.is-active .process-step:nth-child(4) .process-dot { transition-delay: 1200ms; }
+.is-active .process-step:nth-child(5) .process-dot { transition-delay: 1700ms; }
+
+.is-active .process-dot {
+  background: hsl(var(--color-gold));
+}
+
+.process-content {
+  margin-top: 1.25rem;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.is-active .process-step:nth-child(2) .process-content { transition-delay: 350ms; }
+.is-active .process-step:nth-child(3) .process-content { transition-delay: 850ms; }
+.is-active .process-step:nth-child(4) .process-content { transition-delay: 1350ms; }
+.is-active .process-step:nth-child(5) .process-content { transition-delay: 1850ms; }
+
+.is-active .process-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile: vertical timeline */
+@media (max-width: 1023px) {
+  .process-track {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-left: 2rem;
+  }
+
+  .process-line-bg {
+    top: 0;
+    bottom: 0;
+    left: 13px;
+    right: auto;
+    width: 4px;
+    height: 100%;
+  }
+
+  .process-line-fill {
+    width: 100%;
+    height: 0;
+    transition: height 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .is-active .process-line-fill {
+    width: 100%;
+    height: 100%;
+  }
+
+  .process-step {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    padding-bottom: 2.5rem;
+  }
+
+  .process-step:last-child {
+    padding-bottom: 0;
+  }
+
+  .process-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0;
+  }
+
+  .process-content {
+    margin-top: 0;
+    margin-left: 0.75rem;
+  }
+}
+
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
