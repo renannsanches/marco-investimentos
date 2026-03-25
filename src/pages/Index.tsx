@@ -1,16 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/marco/Header";
+import Hero from "@/components/marco/Hero";
+import Numbers from "@/components/marco/Numbers";
+import Credibility from "@/components/marco/Credibility";
+import ClientSection from "@/components/marco/ClientSection";
+import Process from "@/components/marco/Process";
+import Media from "@/components/marco/Media";
+import CtaFinal from "@/components/marco/CtaFinal";
+import Footer from "@/components/marco/Footer";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  useScrollAnimation();
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <>
+      <Header />
+      <Hero />
+      <Numbers />
+      <Credibility />
+      <ClientSection />
+      <Process />
+      <Media />
+      <CtaFinal />
+      <Footer />
+    </>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
