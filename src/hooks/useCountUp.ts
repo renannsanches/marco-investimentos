@@ -6,6 +6,7 @@ function easeOutCubic(t: number) {
 
 export function useCountUp(end: number, duration = 1500) {
   const [count, setCount] = useState(0);
+  const [progress, setProgress] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
@@ -20,9 +21,11 @@ export function useCountUp(end: number, duration = 1500) {
           const start = performance.now();
           const animate = (now: number) => {
             const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            setCount(Math.floor(easeOutCubic(progress) * end));
-            if (progress < 1) requestAnimationFrame(animate);
+            const raw = Math.min(elapsed / duration, 1);
+            const eased = easeOutCubic(raw);
+            setCount(Math.floor(eased * end));
+            setProgress(eased);
+            if (raw < 1) requestAnimationFrame(animate);
           };
           requestAnimationFrame(animate);
         }
@@ -34,5 +37,5 @@ export function useCountUp(end: number, duration = 1500) {
     return () => observer.disconnect();
   }, [end, duration]);
 
-  return { count, ref };
+  return { count, progress, ref };
 }

@@ -14,6 +14,24 @@ export default function Footer() {
     },
   ];
 
+  const socials = [
+    {
+      name: "Facebook",
+      logo: "/images/facebook.webp",
+      url: "https://www.facebook.com/marcoinvestimentos/",
+    },
+    {
+      name: "Instagram",
+      logo: "/images/instagram.webp",
+      url: "https://www.instagram.com/marcoinvestimentos/",
+    },
+    {
+      name: "LinkedIn",
+      logo: "/images/linkedin.webp",
+      url: "https://www.linkedin.com/company/marcoinvestimentos/",
+    },
+  ];
+
   return (
     <footer className="bg-black-deep pt-16 pb-8" id="contato">
       <div className="container mx-auto">
@@ -21,15 +39,21 @@ export default function Footer() {
           {/* Col 1: Logo + Social */}
           <div>
             <img src="/images/logo-marco.svg" alt="Marco Investimentos" className="h-10 w-auto mb-6" />
-            <div className="flex gap-4">
-              {["Facebook", "Instagram", "LinkedIn"].map((social) => (
+            <div className="flex gap-5">
+              {socials.map((social) => (
                 <a
-                  key={social}
-                  href="#"
-                  aria-label={social}
-                  className="font-body text-xs uppercase tracking-wider text-oatmeal hover:text-white-soft transition-colors duration-[250ms] ease"
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className="opacity-100 hover:brightness-[10] transition-all duration-[250ms] ease"
                 >
-                  {social}
+                  <img
+                    src={social.logo}
+                    alt={social.name}
+                    className="h-5 w-5 object-contain"
+                  />
                 </a>
               ))}
             </div>

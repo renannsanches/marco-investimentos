@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import InvestModal from "./InvestModal";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -35,9 +37,8 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[250ms] ease ${
-        scrolled ? "bg-dark-grey/95 backdrop-blur-md" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[250ms] ease ${scrolled ? "bg-dark-grey/85 backdrop-blur-md" : "bg-transparent"
+        }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4">
         <a href="#inicio" onClick={(e) => { e.preventDefault(); scrollTo("#inicio"); }} aria-label="Marco Investimentos">
@@ -60,13 +61,12 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#contato"
-            onClick={(e) => { e.preventDefault(); scrollTo("#contato"); }}
+          <button
+            onClick={() => setModalOpen(true)}
             className="font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-2.5 rounded-[4px] hover:brightness-90 transition-all duration-[250ms] ease border border-gold"
           >
             Quero Investir
-          </a>
+          </button>
         </nav>
 
         {/* Mobile toggle */}
@@ -81,9 +81,8 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 top-0 bg-dark-grey z-40 flex flex-col pt-20 px-8 gap-6 transition-transform duration-[250ms] ease lg:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-0 top-0 bg-dark-grey z-40 flex flex-col pt-20 px-8 gap-6 transition-transform duration-[250ms] ease lg:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {navLinks.map((link) => (
           <a
@@ -95,14 +94,15 @@ export default function Header() {
             {link.label}
           </a>
         ))}
-        <a
-          href="#contato"
-          onClick={(e) => { e.preventDefault(); scrollTo("#contato"); }}
+        <button
+          onClick={() => { setMenuOpen(false); setModalOpen(true); }}
           className="mt-4 font-body font-semibold text-xs uppercase tracking-widest bg-gold text-dark-grey px-6 py-3 rounded-[4px] text-center border border-gold"
         >
           Quero Investir
-        </a>
+        </button>
       </div>
+
+      <InvestModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </header>
   );
 }

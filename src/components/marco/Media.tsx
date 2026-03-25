@@ -1,27 +1,40 @@
 const outlets = [
   {
     name: "InfoMoney",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/InfoMoney_logo.svg/320px-InfoMoney_logo.svg.png",
+    logo: "/images/infomoney.png",
+    url: "https://www.infomoney.com.br/patrocinados/xp-investimentos/marco-investimento-e-xp-fazem-parceria-para-curso-direcionado-para-assessores-de-investimento/",
   },
   {
     name: "Forbes",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Forbes_logo.svg/320px-Forbes_logo.svg.png",
+    logo: "/images/forbes.png",
+    url: "https://forbes.com.br/forbes-tech/2021/08/exclusivo-startup-do-mercado-financeiro-capta-r-65-milhoes-para-democratizar-o-acesso-a-investimentos/",
   },
   {
     name: "GZH",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/GZH_logo.svg/320px-GZH_logo.svg.png",
+    logo: "/images/ghz.png",
+    url: "https://gauchazh.clicrbs.com.br/colunistas/marta-sfredo/noticia/2021/09/startup-gaucha-recebe-aporte-de-r-65-milhoes-e-vai-treinar-jovens-sem-experiencia-ckt3cxevz009s013b3ysus4rv.html",
   },
 ];
 
 export default function Media() {
   return (
-    <section className="bg-white-soft py-[120px]">
+    <section
+      className="relative py-[120px]"
+      style={{
+        backgroundImage: "url('/images/office.webp')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-white-soft/90" />
+
       {/* Gold separator */}
-      <div className="container mx-auto mb-16">
+      <div className="relative z-10 container mx-auto mb-16">
         <div className="w-full h-[1px] bg-gold/30" />
       </div>
 
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div data-animate>
           <h2
             className="font-heading font-semibold text-dark-grey"
@@ -33,15 +46,21 @@ export default function Media() {
 
         <div data-animate className="flex items-center gap-14 flex-wrap">
           {outlets.map((outlet) => (
-            <img
+            <a
               key={outlet.name}
-              src={outlet.logo}
-              alt={outlet.name}
-              className="h-8 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-[250ms] ease grayscale hover:grayscale-0 cursor-pointer"
-            />
+              href={outlet.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={outlet.logo}
+                alt={outlet.name}
+                className="h-8 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-[250ms] ease grayscale hover:grayscale-0 cursor-pointer"
+              />
+            </a>
           ))}
-        </div>
       </div>
-    </section>
+    </div>
+    </section >
   );
 }

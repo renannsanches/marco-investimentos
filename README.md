@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# Marco Investimentos
 
 TODO: Document your project here
