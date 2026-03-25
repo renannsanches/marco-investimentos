@@ -20,14 +20,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Col 1: Logo + Social */}
           <div>
-            <img src="/images/logo-marco.png" alt="Marco Investimentos" className="h-10 w-auto mb-6" />
+            <img src="/images/logo-marco.svg" alt="Marco Investimentos" className="h-10 w-auto mb-6" />
             <div className="flex gap-4">
               {["Facebook", "Instagram", "LinkedIn"].map((social) => (
                 <a
                   key={social}
                   href="#"
                   aria-label={social}
-                  className="font-body text-xs uppercase tracking-wider text-oatmeal hover:text-white-soft transition-colors"
+                  className="font-body text-xs uppercase tracking-wider text-oatmeal hover:text-white-soft transition-colors duration-[250ms] ease"
                 >
                   {social}
                 </a>
@@ -42,7 +42,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 {col.links.map((link) => (
                   <li key={link}>
-                    <a href="#" className="font-body text-sm text-oatmeal hover:text-white-soft transition-colors">
+                    <a href="#" className="font-body text-sm text-oatmeal hover:text-white-soft transition-colors duration-[250ms] ease">
                       <span className="text-gold text-xs mr-1.5">›</span>
                       {link}
                     </a>
@@ -54,7 +54,7 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-dark-grey pt-6">
+        <div className="border-t border-gold/20 pt-6">
           <p className="font-body text-xs text-oatmeal/60 mb-4">
             © 2025, Marco Investimentos. Todos os direitos reservados. | 32.383.761/0001-86 – Marco Assessor de Investimentos LTDA
           </p>
