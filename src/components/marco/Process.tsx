@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const steps = [
   {
     num: "01",
@@ -22,8 +24,28 @@ const steps = [
 ];
 
 export default function Process() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("is-active");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="bg-palladian py-24 lg:py-32">
+    <section ref={sectionRef} className="process-timeline bg-palladian py-24 lg:py-32">
       <div className="container mx-auto text-center mb-16">
         <h2
           data-animate
@@ -37,20 +59,24 @@ export default function Process() {
         </p>
       </div>
 
-      <div className="container mx-auto relative">
-        {/* Dashed connector line (desktop) */}
-        <div className="hidden lg:block absolute top-[60px] left-[12%] right-[12%] border-t-2 border-dashed border-oatmeal z-0" />
+      <div className="container mx-auto">
+        <div className="process-track">
+          {/* Progress line */}
+          <div className="process-line-bg">
+            <div className="process-line-fill" />
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-          {steps.map((step) => (
-            <div
-              key={step.num}
-              data-animate
-              className="bg-white-soft border border-oatmeal rounded-lg p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-            >
-              <div className="font-heading font-semibold text-gold text-4xl mb-4">{step.num}</div>
-              <div className="font-heading font-semibold text-dark-grey text-lg mb-3">{step.title}</div>
-              <p className="font-body text-dark-grey/75 text-sm leading-relaxed">{step.text}</p>
+          {/* Steps */}
+          {steps.map((step, i) => (
+            <div key={step.num} className="process-step" style={{ "--step-index": i } as React.CSSProperties}>
+              <div className="process-dot" />
+              <div className="process-content">
+                <div className="font-heading font-semibold text-gold text-3xl mb-2">{step.num}</div>
+                <div className="font-heading font-semibold text-dark-grey text-lg mb-2">{step.title}</div>
+                <p className="font-body text-dark-grey/75 text-sm leading-relaxed max-w-[220px] mx-auto lg:mx-0">
+                  {step.text}
+                </p>
+              </div>
             </div>
           ))}
         </div>
