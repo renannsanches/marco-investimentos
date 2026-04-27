@@ -27,8 +27,8 @@ export default function Hero() {
       {/* Dark overlay */}
       <div className="absolute inset-0 z-[1] bg-black-deep/[0.72]" />
 
-      {/* Pattern overlay */}
-      <div className="absolute inset-0 z-[2] bg-pattern opacity-[0.06]" />
+      {/* Bottom gradient blending into next section */}
+      <div className="hero-bottom-gradient absolute bottom-0 left-0 right-0 z-[2] h-48 pointer-events-none" />
 
       {/* Content — left-aligned, single column, max-width 680px */}
       <div className="relative z-[3] container mx-auto py-40 md:py-0">

@@ -4,10 +4,10 @@ function SmallStat({ end, prefix = "", suffix = "", label }: { end: number; pref
   const { count, ref } = useCountUp(end);
   return (
     <div ref={ref} className="flex flex-col">
-      <div className="font-heading font-semibold text-dark-grey" style={{ fontSize: "clamp(1.75rem, 2.5vw, 2.5rem)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+      <div className="font-heading font-semibold text-white-soft numbers-stat-value">
         {prefix}{count.toLocaleString("pt-BR")}{suffix}
       </div>
-      <div className="font-body text-dark-grey/60 text-base mt-1">{label}</div>
+      <div className="font-body text-white-soft/50 text-base mt-1">{label}</div>
     </div>
   );
 }
@@ -16,10 +16,10 @@ function BigStat({ end, prefix = "", suffix = "", label }: { end: number; prefix
   const { count, ref } = useCountUp(end);
   return (
     <div ref={ref} className="flex flex-col">
-      <div className="font-heading font-bold text-dark-grey" style={{ fontSize: "clamp(3.5rem, 7vw, 6rem)", letterSpacing: "-0.03em", lineHeight: 1 }}>
+      <div className="font-heading font-bold text-white-soft numbers-bigstat-value">
         {prefix}{count.toLocaleString("pt-BR")}{suffix}
       </div>
-      <div className="font-body text-dark-grey/60 text-base mt-2">{label}</div>
+      <div className="font-body text-white-soft/50 text-base mt-2">{label}</div>
     </div>
   );
 }
@@ -53,27 +53,22 @@ function MiniChart() {
 
 export default function Numbers() {
   return (
-    <section className="relative py-20" id="numeros" style={{ backgroundImage: "url('/images/bg-white-ruido.webp')", backgroundSize: "cover", backgroundPosition: "center" }}>
-      {/* Overlay ajustável — mude a opacidade em rgba() para controlar a intensidade */}
-      <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: "rgba(255, 255, 255, 0.55)" }} />
+    <section className="relative py-20 numbers-section" id="numeros">
       <div className="relative container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* Left */}
           <div className="flex flex-col gap-6">
-            <h2
-              className="font-heading font-bold text-dark-grey leading-tight"
-              style={{ fontSize: "clamp(2.25rem, 4vw, 3.5rem)", letterSpacing: "-0.02em" }}
-            >
+            <h2 className="font-heading font-bold text-white-soft numbers-heading leading-tight">
               Resultados que<br />falam por si
             </h2>
-            <p className="font-body text-dark-grey/65 text-base max-w-sm leading-relaxed">
+            <p className="font-body text-white-soft/60 text-base max-w-sm leading-relaxed">
               Mais de 10 anos de experiência, +R$2 bilhões sob custódia, 52 assessores dedicados e clientes em todo o Brasil.
             </p>
             <div>
               <a
                 href="#contato"
-                className="inline-flex items-center gap-2 font-body font-medium text-sm bg-dark-grey text-white px-5 py-3 rounded-full hover:bg-[#C9A84C] hover:text-dark-grey transition-colors"
+                className="inline-flex items-center gap-2 font-body font-medium text-sm bg-gold text-dark-grey px-5 py-3 rounded-full hover:bg-white-soft hover:text-dark-grey transition-colors"
               >
                 Fale com um assessor <span>›</span>
               </a>
@@ -86,8 +81,8 @@ export default function Numbers() {
           {/* Right */}
           <div className="flex flex-col gap-10">
             {/* Big stat */}
-            <div className="border-b border-dark-grey/15 pb-8">
-              <BigStat end={2} prefix="+R$" suffix="B" label="Mais de R$ 2 Bilhões de reais sob custódia" />
+            <div className="border-b border-white/10 pb-8">
+              <BigStat end={3} prefix="+R$" suffix="B" label="Mais de R$ 2 Bilhões de reais sob custódia" />
             </div>
 
             {/* Small stats grid */}

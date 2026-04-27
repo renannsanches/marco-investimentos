@@ -255,3 +255,68 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Hero bottom gradient blending into #282828 */
+.hero-bottom-gradient {
+  background: linear-gradient(to bottom, transparent, #282828);
+}
+
+/* Numbers section dark background */
+.numbers-section {
+  background-color: #282828;
+}
+
+.numbers-heading {
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  letter-spacing: -0.02em;
+}
+
+.numbers-stat-value {
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.numbers-bigstat-value {
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* ClientSection */
+@keyframes cf1 {
+  0%, 30%   { opacity: 1; }
+  40%, 90%  { opacity: 0; }
+  100%      { opacity: 1; }
+}
+@keyframes cf2 {
+  0%, 10%   { opacity: 0; }
+  30%, 60%  { opacity: 1; }
+  70%, 100% { opacity: 0; }
+}
+@keyframes cf3 {
+  0%, 55%   { opacity: 0; }
+  70%, 90%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+.cf-img-1 { animation: cf1 12s infinite ease-in-out; }
+.cf-img-2 { animation: cf2 12s infinite ease-in-out; }
+.cf-img-3 { animation: cf3 12s infinite ease-in-out; }
+
+.client-bg-slide {
+  background-image: var(--slide-bg-url);
+  background-size: cover;
+  background-position: center;
+}
+
+.client-glass {
+  background: rgba(15, 15, 15, 0.50);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.client-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+}
