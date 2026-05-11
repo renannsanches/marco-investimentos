@@ -1,4 +1,10 @@
+import { useState } from "react";
+import Contactmodal from "./Contactmodal";
+
 export default function Hero() {
+  // Estado seguindo o mesmo padrão do Header
+  const [modalOpen, setModalOpen] = useState(false);
+
   const scrollToAbout = () => {
     const el = document.querySelector("#sobre");
     if (el) {
@@ -12,8 +18,8 @@ export default function Hero() {
       {/* YouTube video background */}
       <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
         <iframe
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-screen min-w-[177.78vh]"
-          src="https://www.youtube.com/embed/F5UusvAJ1w8?autoplay=1&mute=1&loop=1&playlist=F5UusvAJ1w8&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-screen min-w-[177.78vh]" 
+          src="https://www.youtube.com/embed/SAWlqWS6sCE?autoplay=1&mute=1&loop=1&playlist=SAWlqWS6sCE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"          
           title="Marco Investimentos"
           frameBorder="0"
           allow="autoplay; encrypted-media"
@@ -25,7 +31,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 bg-dark-grey md:hidden" />
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 z-[1] bg-black-deep/[0.72]" />
+      <div className="absolute inset-0 z-[1] bg-black-deep/[0.85]" />
 
       {/* Bottom gradient blending into next section */}
       <div className="hero-bottom-gradient absolute bottom-0 left-0 right-0 z-[2] h-48 pointer-events-none" />
@@ -49,13 +55,13 @@ export default function Hero() {
             e alinhado aos seus interesses.
           </p>
 
-          <a
-            href="#contato"
-            onClick={(e) => { e.preventDefault(); document.querySelector("#contato")?.scrollIntoView({ behavior: "smooth" }); }}
+          {/* Alterado para <button> e usando onClick simplificado como no Header */}
+          <button
+            onClick={() => setModalOpen(true)}
             className="inline-block font-body font-semibold text-xs uppercase tracking-widest border border-gold text-gold px-8 py-3 rounded-[4px] hover:bg-gold hover:text-dark-grey transition-all duration-[250ms] ease animate-fade-in-up animate-delay-450"
           >
             Abrir uma conta
-          </a>
+          </button>
 
           <button
             onClick={scrollToAbout}
@@ -65,6 +71,9 @@ export default function Hero() {
           </button>
         </div>
       </div>
+
+      {/* Modal chamado com a prop 'open' exatamente como feito no Header */}
+      <Contactmodal open={modalOpen} onClose={() => setModalOpen(false)} />
     </section>
   );
 }
