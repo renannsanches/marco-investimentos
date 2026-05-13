@@ -12,12 +12,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
     proxy: {
-      // Em dev: /rdstation/... → https://api.rd.services/...
-      // Resolve o bloqueio de CORS da API do RD Marketing
-      "/rdstation": {
-        target: "https://api.rd.services",
+      "/rdstation-legacy": {
+        target: "https://www.rdstation.com.br",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/rdstation/, ""),
+        rewrite: (path) => path.replace(/^\/rdstation-legacy/, ""),
       },
     },
   },

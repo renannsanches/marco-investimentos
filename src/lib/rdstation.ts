@@ -1,11 +1,3 @@
-/**
- * RD Station Marketing — Conversão via API
- * Docs: https://developers.rdstation.com/reference/conversions
- *
- * Em dev: Vite proxy /rdstation → https://api.rd.services (token no .env como VITE_RD_TOKEN)
- * Em produção: Edge Function /api/rdstation (token seguro no painel Vercel como RD_TOKEN)
- */
-
 export interface RDConversionPayload {
   identifier: string;
   name: string;
@@ -15,26 +7,23 @@ export interface RDConversionPayload {
 }
 
 export async function sendRDConversion(payload: RDConversionPayload): Promise<void> {
-  const { identifier, ...fields } = payload;
+  const { identifier, name, email, mobile_phone, ...rest } = payload;
 
-  const body = {
-    event_type: "CONVERSION",
-    event_family: "CDP",
-    payload: {
-      conversion_identifier: identifier,
-      name: fields.name,
-      email: fields.email,
-      mobile_phone: fields.mobile_phone,
-      ...buildCustomFields(fields),
-    },
+  const body: Record<string, string | undefined> = {
+    identificador: identifier,
+    nome: name,
+    email,
+    ...(mobile_phone ? { celular: mobile_phone } : {}),
+    ...buildCustomFields(rest),
   };
 
-  // Dev: proxy Vite → usa VITE_RD_TOKEN no .env
-  // Produção: Edge Function → usa RD_TOKEN seguro no servidor
   const isDev = import.meta.env.DEV;
-  const url = isDev
-    ? `/rdstation/platform/events?api_key=${import.meta.env.VITE_RD_TOKEN}`
-    : `/api/rdstation`;
+
+  if (isDev) {
+    body.token_rdstation = import.meta.env.VITE_RD_TOKEN;
+  }
+
+  const url = isDev ? `/rdstation-legacy/api/1.3/conversions` : `/api/rdstation`;
 
   const res = await fetch(url, {
     method: "POST",

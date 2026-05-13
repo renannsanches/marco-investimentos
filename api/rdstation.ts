@@ -4,21 +4,20 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   const token = process.env.RD_TOKEN;
-
-  // DEBUG — remover depois de confirmar que funciona
   if (!token) {
     return new Response(JSON.stringify({ error: "RD_TOKEN ausente no servidor" }), { status: 500 });
   }
 
   try {
-    const body = await req.text();
+    const incoming = await req.json();
+    const body = { ...incoming, token_rdstation: token };
 
     const response = await fetch(
-      `https://api.rd.services/platform/events?api_key=${token}`,
+      "https://www.rdstation.com.br/api/1.3/conversions",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body,
+        body: JSON.stringify(body),
       }
     );
 
