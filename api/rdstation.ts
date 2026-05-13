@@ -13,6 +13,9 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     const body = await req.text();
 
+console.log("[DEBUG] token:", token);
+console.log("[DEBUG] url:", `https://api.rd.services/platform/events?api_key=${token}`);
+
     const response = await fetch(
       `https://api.rd.services/platform/events?api_key=${token}`,
       {
