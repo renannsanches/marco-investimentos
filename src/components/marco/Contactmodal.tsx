@@ -43,19 +43,25 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     handleChange("whatsapp", applyPhoneMask(e.target.value));
   };
 
+  const resetForm = () =>
+    setForm({ nome: "", whatsapp: "", email: "", mensagem: "", comunicacoes: false });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const ok = await submit({
-      identifier: "site-fale-conosco",   // aparece assim no RD Marketing
+      identifier: "site-fale-conosco",
       name: form.nome,
       email: form.email,
       mobile_phone: form.whatsapp,
-      cf_mensagem: form.mensagem,        // custom field
+      cf_mensagem: form.mensagem,
       cf_aceita_comunicacoes: form.comunicacoes ? "sim" : "nao",
     });
 
-    if (ok) onClose();
+    if (ok) {
+      resetForm();
+      onClose();
+    }
   };
 
   const inputClass =

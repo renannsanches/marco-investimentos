@@ -53,20 +53,26 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
     handleChange("telefone", applyPhoneMask(e.target.value));
   };
 
+  const resetForm = () =>
+    setForm({ nome: "", email: "", telefone: "", investimento: "", contato: "", privacidade: false });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.privacidade) return;
 
     const ok = await submit({
-      identifier: "site-abrir-conta",    // aparece assim no RD Marketing
+      identifier: "site-abrir-conta",
       name: form.nome,
       email: form.email,
       mobile_phone: form.telefone,
-      cf_patrimonio_investimento: form.investimento,   // custom field
-      cf_canal_preferido: form.contato,               // custom field
+      cf_patrimonio_investimento: form.investimento,
+      cf_canal_preferido: form.contato,
     });
 
-    if (ok) onClose();
+    if (ok) {
+      resetForm();
+      onClose();
+    }
   };
 
   const inputClass =
