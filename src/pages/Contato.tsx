@@ -3,14 +3,14 @@ import Header from "@/components/marco/Header";
 import Footer from "@/components/marco/Footer";
 import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useRDStation } from "@/hooks/useRDStation";
 
 function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
   if (digits.length === 0) return "";
   if (digits.length <= 2) return `(${digits}`;
   if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  if (digits.length <= 11)
-    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  if (digits.length <= 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
 }
 
@@ -29,6 +29,7 @@ function CheckIcon() {
 
 export default function Contato() {
   useScrollAnimation();
+  const { submit, loading } = useRDStation();
 
   const [form, setForm] = useState({
     nome: "",
@@ -47,10 +48,19 @@ export default function Contato() {
     handleChange("celular", applyPhoneMask(e.target.value));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Contato form submitted:", form);
-    setSent(true);
+
+    const ok = await submit({
+      identifier: "site-pagina-contato",   // aparece assim no RD Marketing
+      name: form.nome,
+      email: form.email,
+      mobile_phone: form.celular,
+      cf_mensagem: form.mensagem,
+      cf_aceita_comunicacoes: form.comunicacoes ? "sim" : "nao",
+    });
+
+    if (ok) setSent(true);
   };
 
   return (
@@ -59,9 +69,7 @@ export default function Contato() {
 
       {/* Hero */}
       <section className="relative bg-dark-grey pt-40 pb-[100px] overflow-hidden">
-        {/* Carousel BG — add image paths below to enable, e.g. "/images/carrossel/Foto 01.webp" */}
         <CarouselBg images={["/images/marco-1.webp"]} />
-
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black-deep to-transparent" />
         <div className="relative z-10 container mx-auto">
           <div className="w-[60px] h-[1px] bg-gold mb-10 animate-fade-in-up" />
@@ -70,8 +78,7 @@ export default function Contato() {
               className="font-heading font-semibold text-white-soft leading-tight mb-6 animate-fade-in-up animate-delay-150"
               style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)", letterSpacing: "-0.02em" }}
             >
-              Fale com a{" "}
-              <span className="text-gold">Marco</span>
+              Fale com a <span className="text-gold">Marco</span>
             </h1>
             <p className="font-body text-lg text-white-soft/70 leading-relaxed animate-fade-in-up animate-delay-300">
               Preencha o formulário e um de nossos assessores entrará em contato em breve.
@@ -125,20 +132,11 @@ export default function Contato() {
                   },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gold/10 shrink-0 mt-0.5">
-                      {item.icon}
-                    </div>
+                    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gold/10 shrink-0 mt-0.5">{item.icon}</div>
                     <div>
                       <p className="font-body text-xs text-white-soft/40 uppercase tracking-wider mb-1">{item.label}</p>
                       {item.href ? (
-                        <a
-                          href={item.href}
-                          target={item.href.startsWith("http") ? "_blank" : undefined}
-                          rel="noopener noreferrer"
-                          className="font-body text-white-soft/80 hover:text-gold transition-colors duration-200 text-sm"
-                        >
-                          {item.value}
-                        </a>
+                        <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="font-body text-white-soft/80 hover:text-gold transition-colors duration-200 text-sm">{item.value}</a>
                       ) : (
                         <p className="font-body text-white-soft/80 text-sm">{item.value}</p>
                       )}
@@ -147,14 +145,7 @@ export default function Contato() {
                 ))}
               </div>
 
-              {/* Decorative quote */}
-              <div
-                className="rounded-2xl p-7 mt-4"
-                style={{
-                  background: "rgba(201,168,76,0.06)",
-                  border: "1px solid rgba(201,168,76,0.15)",
-                }}
-              >
+              <div className="rounded-2xl p-7 mt-4" style={{ background: "rgba(201,168,76,0.06)", border: "1px solid rgba(201,168,76,0.15)" }}>
                 <p className="font-heading text-white-soft/80 leading-relaxed" style={{ fontSize: "1.05rem", letterSpacing: "-0.01em" }}>
                   "Sua jornada financeira começa com uma conversa. Estamos aqui para ouvir e transformar seus objetivos em realidade."
                 </p>
@@ -167,23 +158,11 @@ export default function Contato() {
 
             {/* Right — form card */}
             <div data-animate style={{ transitionDelay: "120ms" }}>
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
-                }}
-              >
-                {/* Top gold line */}
-                <div
-                  className="h-0.5 w-full"
-                  style={{ background: "linear-gradient(90deg, transparent, #C9A84C, transparent)" }}
-                />
+              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
+                <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, #C9A84C, transparent)" }} />
 
                 <div className="p-8 lg:p-10">
                   {sent ? (
-                    /* Success state */
                     <div className="flex flex-col items-center text-center py-10 gap-6">
                       <div className="w-16 h-16 rounded-full bg-gold/15 flex items-center justify-center">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -192,9 +171,7 @@ export default function Contato() {
                       </div>
                       <div>
                         <h3 className="font-heading font-semibold text-white-soft text-xl mb-2">Mensagem enviada!</h3>
-                        <p className="font-body text-white-soft/60 text-sm leading-relaxed">
-                          Em breve um de nossos assessores entrará em contato com você.
-                        </p>
+                        <p className="font-body text-white-soft/60 text-sm leading-relaxed">Em breve um de nossos assessores entrará em contato com você.</p>
                       </div>
                       <button
                         type="button"
@@ -206,94 +183,43 @@ export default function Contato() {
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                      {/* Nome */}
                       <div className="flex flex-col gap-2">
                         <label className={labelClass}>Nome</label>
-                        <input
-                          type="text"
-                          placeholder="Nome Sobrenome"
-                          value={form.nome}
-                          onChange={(e) => handleChange("nome", e.target.value)}
-                          required
-                          className={inputClass}
-                        />
+                        <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
                       </div>
 
-                      {/* E-mail */}
                       <div className="flex flex-col gap-2">
                         <label className={labelClass}>E-mail</label>
-                        <input
-                          type="email"
-                          placeholder="seu@email.com"
-                          value={form.email}
-                          onChange={(e) => handleChange("email", e.target.value)}
-                          required
-                          className={inputClass}
-                        />
+                        <input type="email" placeholder="seu@email.com" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required className={inputClass} />
                       </div>
 
-                      {/* Celular / WhatsApp */}
                       <div className="flex flex-col gap-2">
                         <label className={labelClass}>Celular / WhatsApp</label>
-                        <input
-                          type="tel"
-                          placeholder="(47) 99999-9999"
-                          value={form.celular}
-                          onChange={handlePhone}
-                          maxLength={15}
-                          required
-                          className={inputClass}
-                        />
+                        <input type="tel" placeholder="(47) 99999-9999" value={form.celular} onChange={handlePhone} maxLength={15} required className={inputClass} />
                       </div>
 
-                      {/* Mensagem */}
                       <div className="flex flex-col gap-2">
                         <label className={labelClass}>Mensagem</label>
-                        <textarea
-                          placeholder="Como podemos ajudar você?"
-                          value={form.mensagem}
-                          onChange={(e) => handleChange("mensagem", e.target.value)}
-                          required
-                          rows={5}
-                          className={`${inputClass} resize-none`}
-                        />
+                        <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={5} className={`${inputClass} resize-none`} />
                       </div>
 
-                      {/* Checkbox */}
                       <label className="flex items-start gap-3 cursor-pointer group mt-1">
                         <div className="relative mt-0.5 shrink-0">
-                          <input
-                            type="checkbox"
-                            checked={form.comunicacoes}
-                            onChange={(e) => handleChange("comunicacoes", e.target.checked)}
-                            className="sr-only"
-                          />
-                          <div
-                            className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center"
-                            style={{
-                              background: form.comunicacoes ? "#C9A84C" : "rgba(255,255,255,0.06)",
-                              borderColor: form.comunicacoes ? "#C9A84C" : "rgba(255,255,255,0.20)",
-                            }}
-                          >
+                          <input type="checkbox" checked={form.comunicacoes} onChange={(e) => handleChange("comunicacoes", e.target.checked)} className="sr-only" />
+                          <div className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center" style={{ background: form.comunicacoes ? "#C9A84C" : "rgba(255,255,255,0.06)", borderColor: form.comunicacoes ? "#C9A84C" : "rgba(255,255,255,0.20)" }}>
                             {form.comunicacoes && <CheckIcon />}
                           </div>
                         </div>
-                        <span className="font-body text-xs text-white-soft/45 leading-relaxed group-hover:text-white-soft/65 transition-colors">
-                          Eu concordo em receber comunicações.
-                        </span>
+                        <span className="font-body text-xs text-white-soft/45 leading-relaxed group-hover:text-white-soft/65 transition-colors">Eu concordo em receber comunicações.</span>
                       </label>
 
-                      {/* Botão */}
                       <button
                         type="submit"
-                        className="mt-1 w-full font-body font-semibold text-sm py-4 rounded-xl transition-all duration-200 hover:brightness-110"
-                        style={{
-                          background: "linear-gradient(135deg, #C9A84C, #a8884d)",
-                          color: "white",
-                          boxShadow: "0 4px 24px rgba(201,168,76,0.30)",
-                        }}
+                        disabled={loading}
+                        className="mt-1 w-full font-body font-semibold text-sm py-4 rounded-xl transition-all duration-200 hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
+                        style={{ background: "linear-gradient(135deg, #C9A84C, #a8884d)", color: "white", boxShadow: "0 4px 24px rgba(201,168,76,0.30)" }}
                       >
-                        Enviar mensagem
+                        {loading ? "Enviando..." : "Enviar mensagem"}
                       </button>
                     </form>
                   )}

@@ -11,6 +11,15 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      // Em dev: /rdstation/... → https://api.rd.services/...
+      // Resolve o bloqueio de CORS da API do RD Marketing
+      "/rdstation": {
+        target: "https://api.rd.services",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/rdstation/, ""),
+      },
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
