@@ -33,6 +33,7 @@ function applyPhoneMask(value: string): string {
 
 export default function InvestModal({ open, onClose }: InvestModalProps) {
   const { submit, loading } = useRDStation();
+  const [sent, setSent] = useState(false);
 
   const [form, setForm] = useState({
     nome: "",
@@ -53,8 +54,15 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
     handleChange("telefone", applyPhoneMask(e.target.value));
   };
 
-  const resetForm = () =>
+  const resetForm = () => {
     setForm({ nome: "", email: "", telefone: "", investimento: "", contato: "", privacidade: false });
+    setSent(false);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,10 +77,7 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
       cf_canal_preferido: form.contato,
     });
 
-    if (ok) {
-      resetForm();
-      onClose();
-    }
+    if (ok) setSent(true);
   };
 
   const inputClass =
@@ -89,7 +94,7 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
       `}</style>
 
       <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" role="dialog" aria-modal="true">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={handleClose} />
 
         <div
           className="relative z-10 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl"
@@ -103,86 +108,110 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
         >
           <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, #C2A161, transparent)" }} />
 
-          <button onClick={onClose} className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors z-10" aria-label="Fechar">
+          <button onClick={handleClose} className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors z-10" aria-label="Fechar">
             <X size={18} />
           </button>
 
           <div className="px-8 py-7">
-            <h2 className="font-heading text-xl font-bold text-white mb-1">Abrir sua conta é simples</h2>
-            <div className="h-px w-full mb-4" style={{ background: "linear-gradient(90deg, rgba(194,161,97,0.6), transparent)" }} />
-            <p className="font-body text-sm text-white/60 mb-6 leading-relaxed">
-              Informe seus dados e em breve um assessor entrará em contato para ajudar a realizar a abertura da conta.
-            </p>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="font-body text-xs text-white/60 uppercase tracking-wider">Nome</label>
-                <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="font-body text-xs text-white/60 uppercase tracking-wider">Seu melhor e-mail</label>
-                <input type="email" placeholder="seu@email.com" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required className={inputClass} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="font-body text-xs text-white/60 uppercase tracking-wider flex items-center gap-1.5"><WhatsAppIcon />WhatsApp</label>
-                <input type="tel" placeholder="(47) 90000-0000" value={form.telefone} onChange={handlePhone} maxLength={15} required className={inputClass} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="font-body text-xs text-white/60 uppercase tracking-wider">Patrimônio líquido para investimento</label>
-                <div className="relative">
-                  <select value={form.investimento} onChange={(e) => handleChange("investimento", e.target.value)} required className={`${selectClass} invest-modal-select`}>
-                    <option value="" disabled>Selecione...</option>
-                    {INVESTMENT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg">›</span>
+            {sent ? (
+              <div className="flex flex-col items-center text-center py-8 gap-5">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(194,161,97,0.15)", border: "1px solid rgba(194,161,97,0.3)" }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#C2A161" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="font-body text-xs text-white/60 uppercase tracking-wider">Prefere ser contatado por</label>
-                <div className="relative">
-                  <select value={form.contato} onChange={(e) => handleChange("contato", e.target.value)} required className={`${selectClass} invest-modal-select`}>
-                    <option value="" disabled>Selecione...</option>
-                    {CONTACT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg">›</span>
+                <div>
+                  <h3 className="font-heading font-semibold text-white text-xl mb-2">Recebemos seu contato!</h3>
+                  <p className="font-body text-white/60 text-sm leading-relaxed">Em breve um de nossos assessores entrará em contato para dar início ao processo de abertura da sua conta.</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200"
+                  style={{ background: "linear-gradient(135deg, #C2A161, #a8884d)", color: "white", boxShadow: "0 4px 20px rgba(194,161,97,0.35)", cursor: "pointer" }}
+                >
+                  Fechar
+                </button>
               </div>
+            ) : (
+              <>
+                <h2 className="font-heading text-xl font-bold text-white mb-1">Abrir sua conta é simples</h2>
+                <div className="h-px w-full mb-4" style={{ background: "linear-gradient(90deg, rgba(194,161,97,0.6), transparent)" }} />
+                <p className="font-body text-sm text-white/60 mb-6 leading-relaxed">
+                  Informe seus dados e em breve um assessor entrará em contato para ajudar a realizar a abertura da conta.
+                </p>
 
-              <label className="flex items-start gap-3 cursor-pointer group mt-1">
-                <div className="relative mt-0.5 shrink-0">
-                  <input type="checkbox" checked={form.privacidade} onChange={(e) => handleChange("privacidade", e.target.checked)} className="sr-only" />
-                  <div className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center" style={{ background: form.privacidade ? "#C2A161" : "rgba(255,255,255,0.08)", borderColor: form.privacidade ? "#C2A161" : "rgba(255,255,255,0.25)" }}>
-                    {form.privacidade && (
-                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    )}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-xs text-white/60 uppercase tracking-wider">Nome</label>
+                    <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
                   </div>
-                </div>
-                <span className="font-body text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
-                  Li e aceito a{" "}
-                  <a href="/politica-de-privacidade" target="_blank" rel="noopener noreferrer" className="text-[#C2A161] underline underline-offset-2 hover:text-[#d4b87a] transition-colors" onClick={(e) => e.stopPropagation()}>
-                    Política de Privacidade
-                  </a>
-                </span>
-              </label>
 
-              <button
-                type="submit"
-                disabled={!form.privacidade || loading}
-                className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200"
-                style={{
-                  background: form.privacidade ? "linear-gradient(135deg, #C2A161, #a8884d)" : "rgba(255,255,255,0.1)",
-                  color: form.privacidade ? "white" : "rgba(255,255,255,0.3)",
-                  cursor: form.privacidade && !loading ? "pointer" : "not-allowed",
-                  boxShadow: form.privacidade ? "0 4px 20px rgba(194,161,97,0.35)" : "none",
-                }}
-              >
-                {loading ? "Enviando..." : "Investir com a Marco"}
-              </button>
-            </form>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-xs text-white/60 uppercase tracking-wider">Seu melhor e-mail</label>
+                    <input type="email" placeholder="seu@email.com" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required className={inputClass} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-xs text-white/60 uppercase tracking-wider flex items-center gap-1.5"><WhatsAppIcon />WhatsApp</label>
+                    <input type="tel" placeholder="(47) 90000-0000" value={form.telefone} onChange={handlePhone} maxLength={15} required className={inputClass} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-xs text-white/60 uppercase tracking-wider">Patrimônio líquido para investimento</label>
+                    <div className="relative">
+                      <select value={form.investimento} onChange={(e) => handleChange("investimento", e.target.value)} required className={`${selectClass} invest-modal-select`}>
+                        <option value="" disabled>Selecione...</option>
+                        {INVESTMENT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                      </select>
+                      <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg">›</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-xs text-white/60 uppercase tracking-wider">Prefere ser contatado por</label>
+                    <div className="relative">
+                      <select value={form.contato} onChange={(e) => handleChange("contato", e.target.value)} required className={`${selectClass} invest-modal-select`}>
+                        <option value="" disabled>Selecione...</option>
+                        {CONTACT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                      </select>
+                      <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg">›</span>
+                    </div>
+                  </div>
+
+                  <label className="flex items-start gap-3 cursor-pointer group mt-1">
+                    <div className="relative mt-0.5 shrink-0">
+                      <input type="checkbox" checked={form.privacidade} onChange={(e) => handleChange("privacidade", e.target.checked)} className="sr-only" />
+                      <div className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center" style={{ background: form.privacidade ? "#C2A161" : "rgba(255,255,255,0.08)", borderColor: form.privacidade ? "#C2A161" : "rgba(255,255,255,0.25)" }}>
+                        {form.privacidade && (
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        )}
+                      </div>
+                    </div>
+                    <span className="font-body text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
+                      Li e aceito a{" "}
+                      <a href="/politica-de-privacidade" target="_blank" rel="noopener noreferrer" className="text-[#C2A161] underline underline-offset-2 hover:text-[#d4b87a] transition-colors" onClick={(e) => e.stopPropagation()}>
+                        Política de Privacidade
+                      </a>
+                    </span>
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={!form.privacidade || loading}
+                    className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200"
+                    style={{
+                      background: form.privacidade ? "linear-gradient(135deg, #C2A161, #a8884d)" : "rgba(255,255,255,0.1)",
+                      color: form.privacidade ? "white" : "rgba(255,255,255,0.3)",
+                      cursor: form.privacidade && !loading ? "pointer" : "not-allowed",
+                      boxShadow: form.privacidade ? "0 4px 20px rgba(194,161,97,0.35)" : "none",
+                    }}
+                  >
+                    {loading ? "Enviando..." : "Investir com a Marco"}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>

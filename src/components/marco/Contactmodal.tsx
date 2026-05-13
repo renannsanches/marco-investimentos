@@ -24,6 +24,7 @@ function applyPhoneMask(value: string): string {
 
 export default function ContactModal({ open, onClose }: ContactModalProps) {
   const { submit, loading } = useRDStation();
+  const [sent, setSent] = useState(false);
 
   const [form, setForm] = useState({
     nome: "",
@@ -43,8 +44,15 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     handleChange("whatsapp", applyPhoneMask(e.target.value));
   };
 
-  const resetForm = () =>
+  const resetForm = () => {
     setForm({ nome: "", whatsapp: "", email: "", mensagem: "", comunicacoes: false });
+    setSent(false);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,10 +66,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       cf_aceita_comunicacoes: form.comunicacoes ? "sim" : "nao",
     });
 
-    if (ok) {
-      resetForm();
-      onClose();
-    }
+    if (ok) setSent(true);
   };
 
   const inputClass =
@@ -76,7 +81,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       `}</style>
 
       <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" role="dialog" aria-modal="true">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={handleClose} />
 
         <div
           className="relative z-10 w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl flex"
@@ -100,56 +105,80 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           <div className="flex-1 overflow-y-auto">
             <div className="h-0.5 w-full" style={{ background: "linear-gradient(90deg, transparent, #C2A161, transparent)" }} />
 
-            <button onClick={onClose} className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors z-20" aria-label="Fechar">
+            <button onClick={handleClose} className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors z-20" aria-label="Fechar">
               <X size={18} />
             </button>
 
             <div className="px-8 py-7">
-              <h2 className="font-heading text-xl font-bold text-white mb-1">Fale conosco:</h2>
-              <div className="h-px w-full mb-5" style={{ background: "linear-gradient(90deg, rgba(194,161,97,0.6), transparent)" }} />
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Nome</label>
-                  <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className={`${labelClass} flex items-center gap-1.5`}><WhatsAppIcon />WhatsApp</label>
-                  <input type="tel" placeholder="(99) 99999-9999" value={form.whatsapp} onChange={handlePhone} maxLength={15} required className={inputClass} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Seu melhor e-mail</label>
-                  <input type="email" placeholder="seu@email.com" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required className={inputClass} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Escreva a sua mensagem</label>
-                  <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={4} className={`${inputClass} resize-none`} />
-                </div>
-
-                <label className="flex items-start gap-3 cursor-pointer group mt-1">
-                  <div className="relative mt-0.5 shrink-0">
-                    <input type="checkbox" checked={form.comunicacoes} onChange={(e) => handleChange("comunicacoes", e.target.checked)} className="sr-only" />
-                    <div className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center" style={{ background: form.comunicacoes ? "#C2A161" : "rgba(255,255,255,0.08)", borderColor: form.comunicacoes ? "#C2A161" : "rgba(255,255,255,0.25)" }}>
-                      {form.comunicacoes && (
-                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      )}
-                    </div>
+              {sent ? (
+                <div className="flex flex-col items-center text-center py-8 gap-5">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(194,161,97,0.15)", border: "1px solid rgba(194,161,97,0.3)" }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                      <path d="M20 6L9 17l-5-5" stroke="#C2A161" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </div>
-                  <span className="font-body text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">Eu concordo em receber comunicações.</span>
-                </label>
+                  <div>
+                    <h3 className="font-heading font-semibold text-white text-xl mb-2">Mensagem enviada!</h3>
+                    <p className="font-body text-white/60 text-sm leading-relaxed">Em breve um de nossos assessores entrará em contato com você.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200"
+                    style={{ background: "linear-gradient(135deg, #C2A161, #a8884d)", color: "white", boxShadow: "0 4px 20px rgba(194,161,97,0.35)", cursor: "pointer" }}
+                  >
+                    Fechar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <h2 className="font-heading text-xl font-bold text-white mb-1">Fale conosco:</h2>
+                  <div className="h-px w-full mb-5" style={{ background: "linear-gradient(90deg, rgba(194,161,97,0.6), transparent)" }} />
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #C2A161, #a8884d)", color: "white", boxShadow: "0 4px 20px rgba(194,161,97,0.35)" }}
-                >
-                  {loading ? "Enviando..." : "Enviar mensagem"}
-                </button>
-              </form>
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className={labelClass}>Nome</label>
+                      <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className={`${labelClass} flex items-center gap-1.5`}><WhatsAppIcon />WhatsApp</label>
+                      <input type="tel" placeholder="(99) 99999-9999" value={form.whatsapp} onChange={handlePhone} maxLength={15} required className={inputClass} />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className={labelClass}>Seu melhor e-mail</label>
+                      <input type="email" placeholder="seu@email.com" value={form.email} onChange={(e) => handleChange("email", e.target.value)} required className={inputClass} />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className={labelClass}>Escreva a sua mensagem</label>
+                      <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={4} className={`${inputClass} resize-none`} />
+                    </div>
+
+                    <label className="flex items-start gap-3 cursor-pointer group mt-1">
+                      <div className="relative mt-0.5 shrink-0">
+                        <input type="checkbox" checked={form.comunicacoes} onChange={(e) => handleChange("comunicacoes", e.target.checked)} className="sr-only" />
+                        <div className="w-4 h-4 rounded border transition-all duration-200 flex items-center justify-center" style={{ background: form.comunicacoes ? "#C2A161" : "rgba(255,255,255,0.08)", borderColor: form.comunicacoes ? "#C2A161" : "rgba(255,255,255,0.25)" }}>
+                          {form.comunicacoes && (
+                            <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                          )}
+                        </div>
+                      </div>
+                      <span className="font-body text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">Eu concordo em receber comunicações.</span>
+                    </label>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                      style={{ background: "linear-gradient(135deg, #C2A161, #a8884d)", color: "white", boxShadow: "0 4px 20px rgba(194,161,97,0.35)", cursor: "pointer" }}
+                    >
+                      {loading ? "Enviando..." : "Enviar mensagem"}
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>
