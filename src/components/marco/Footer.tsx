@@ -53,7 +53,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Col 1: Logo + Social */}
           <div>
-            <img src="/images/logo-marco.svg" alt="Marco Investimentos" className="w-full max-w-[220px] h-auto mb-6" />
+            <img src="/images/logo-marco.svg" alt="Marco Investimentos" className="mb-6" style={{ height: '32px', width: 'auto' }} />
             <div className="flex gap-5">
               {socials.map((social) => (
                 <a
