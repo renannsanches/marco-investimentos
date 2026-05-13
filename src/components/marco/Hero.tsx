@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Contactmodal from "./Contactmodal";
+import InvestModal from "./InvestModal";
 
 export default function Hero() {
   // Estado seguindo o mesmo padrão do Header
@@ -72,8 +72,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Modal chamado com a prop 'open' exatamente como feito no Header */}
-      <Contactmodal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <InvestModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </section>
   );
 }
