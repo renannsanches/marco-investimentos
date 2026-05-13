@@ -1,16 +1,31 @@
+type LinkItem = { label: string; href: string };
+
 export default function Footer() {
-  const columns = [
+  const columns: { title: string; links: LinkItem[] }[] = [
     {
       title: "A Marco",
-      links: ["Quem somos", "Nossos escritórios", "Carreiras", "Assessores", "Fale conosco"],
+      links: [
+        { label: "Quem somos", href: "/sobre/a-marco" },
+        { label: "Nossos escritórios", href: "/sobre/nossos-escritorios" },
+        { label: "Carreiras", href: "/sobre/carreiras" },
+        { label: "Assessores", href: "/assessores" },
+        { label: "Fale conosco", href: "/contato" },
+      ],
     },
     {
       title: "Soluções",
-      links: ["Investimentos", "Corporativas"],
+      links: [
+        { label: "Investimentos", href: "/solucoes/investimentos" },
+        { label: "Corporativas", href: "/solucoes/corporativas" },
+      ],
     },
     {
       title: "LGPD",
-      links: ["Portal da Privacidade", "Política de Privacidade e Proteção de Dados Pessoais", "Política de Cookies"],
+      links: [
+        { label: "Portal da Privacidade", href: "#" },
+        { label: "Política de Privacidade e Proteção de Dados Pessoais", href: "/lgpd/politica-de-privacidade" },
+        { label: "Política de Cookies", href: "/lgpd/politica-de-cookies" },
+      ],
     },
   ];
 
@@ -65,10 +80,10 @@ export default function Footer() {
               <h4 className="font-heading font-semibold text-white-soft text-sm mb-4">{col.title}</h4>
               <ul className="space-y-2">
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="font-body text-sm text-oatmeal hover:text-white-soft transition-colors duration-[250ms] ease">
+                  <li key={link.label}>
+                    <a href={link.href} className="font-body text-sm text-oatmeal hover:text-white-soft transition-colors duration-[250ms] ease">
                       <span className="text-gold text-xs mr-1.5">›</span>
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}

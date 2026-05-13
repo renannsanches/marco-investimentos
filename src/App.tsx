@@ -12,6 +12,8 @@ import Corporativas from "./pages/Corporativas.tsx";
 import Assessores from "./pages/Assessores.tsx";
 import Contato from "./pages/Contato.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PoliticaPrivacidade from "./pages/PoliticaPrivacidade.tsx";
+import PoliticaCookies from "./pages/PoliticaCookies.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/solucoes/corporativas" element={<Corporativas />} />
           <Route path="/assessores" element={<Assessores />} />
           <Route path="/contato" element={<Contato />} />
+          <Route path="/lgpd/politica-de-privacidade" element={<PoliticaPrivacidade />} />
+          <Route path="/lgpd/politica-de-cookies" element={<PoliticaCookies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
