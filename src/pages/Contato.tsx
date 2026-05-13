@@ -105,8 +105,8 @@ export default function Contato() {
                       </svg>
                     ),
                     label: "WhatsApp",
-                    value: "(47) 99260-7326",
-                    href: "https://api.whatsapp.com/send?phone=5547992607326",
+                    value: "(47) 99254-7654",
+                    href: "https://api.whatsapp.com/send?phone=5547992547654",
                   },
                   {
                     icon: (
