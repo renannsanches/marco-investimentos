@@ -1,29 +1,35 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: Request): Promise<Response> {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
   }
 
   const token = process.env.RD_TOKEN;
+
+  // DEBUG — remover depois de confirmar que funciona
   if (!token) {
-    return res.status(500).json({ error: "RD_TOKEN não configurado" });
+    return new Response(JSON.stringify({ error: "RD_TOKEN ausente no servidor" }), { status: 500 });
   }
 
   try {
+    const body = await req.text();
+
     const response = await fetch(
       `https://api.rd.services/platform/events?api_key=${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: typeof req.body === "string" ? req.body : JSON.stringify(req.body),
+        body,
       }
     );
 
     const text = await response.text();
-    return res.status(response.status).send(text);
+    return new Response(text, { status: response.status });
   } catch (err) {
     console.error("[RDStation Edge Function]", err);
-    return res.status(500).json({ error: "Erro interno ao contatar RD Station" });
+    return new Response(JSON.stringify({ error: "Erro interno ao contatar RD Station" }), { status: 500 });
   }
 }
+
+export const config = {
+  runtime: "edge",
+};
