@@ -85,6 +85,7 @@ export default function Header() {
             src="/images/logo-marco.svg"
             alt="Marco Investimentos"
             className="h-10 w-auto"
+            fetchPriority="high"
           />
         </Link>
 

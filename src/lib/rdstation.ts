@@ -17,15 +17,9 @@ export async function sendRDConversion(payload: RDConversionPayload): Promise<vo
     ...buildCustomFields(rest),
   };
 
-  const isDev = import.meta.env.DEV;
+  body.token_rdstation = "0b583302870eae833530cf0a4bbf7103";
 
-  if (isDev) {
-    body.token_rdstation = import.meta.env.VITE_RD_TOKEN;
-  }
-
-  const url = isDev ? `/rdstation-legacy/api/1.3/conversions` : `/api/rdstation`;
-
-  const res = await fetch(url, {
+  const res = await fetch("https://www.rdstation.com.br/api/1.3/conversions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

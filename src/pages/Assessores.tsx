@@ -1,63 +1,35 @@
+import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/marco/Header";
 import Footer from "@/components/marco/Footer";
 import CtaFinal from "@/components/marco/CtaFinal";
 import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
-const assessores = [
-  { name: "Thales Nóbrega", file: "Thales-Nobrega.webp", role: "CEO" },
-  { name: "Abraham Alcalay", file: "Abraham-Alcalay.webp" },
-  { name: "André Narval", file: "Andre-Narval.webp" },
-  { name: "Cícero Interaminense", file: "Cicero-Interaminense.webp" },
-  { name: "Deivid Alves", file: "Deivid-Alves.jpg" },
-  { name: "Diego Cavalheiro", file: "Diego-Cavalheiro.webp" },
-  { name: "Douglas Lages", file: "Douglas-Lages.webp" },
-  { name: "Felipe Guadagnin", file: "Felipe-Guadagnin.webp" },
-  { name: "Fernanda Simon", file: "Fernanda-Simon.webp" },
-  { name: "Filipe Assis", file: "Filipe-Assis-2.png" },
-  { name: "Filipe Dias", file: "Filipe-dias.webp" },
-  { name: "Filipe Santos", file: "Filipe-Santos.webp" },
-  { name: "Gabriel Boff", file: "gabriel-boff.webp" },
-  { name: "Gabriel Pereira", file: "Gabriel-Pereira.webp" },
-  { name: "Geizi Amarante", file: "Geizi-Amarante.webp" },
-  { name: "Giordano Fiorese", file: "Giordano-Fiorese.webp" },
-  { name: "Gregori Zamprogna", file: "Gregori-Zamprogna.png" },
-  { name: "Guilherme Cepeda", file: "Guilherme-Cepeda.png" },
-  { name: "Guilherme Chaves", file: "WhatsApp-Image-2025-03-17-at-15.18.08.jpeg" },
-  { name: "Gustavo Piva", file: "Gustavo-Piva.webp" },
-  { name: "Gustavo Ponzoni", file: "Gustavo-Ponzoni.webp" },
-  { name: "Henrique Jandt", file: "Henrique-Jandt.webp" },
-  { name: "Henrique Kopp", file: "Henrique-Kopp.webp" },
-  { name: "Igor Farias", file: "Igor-Farias.png" },
-  { name: "Jacson Telles", file: "Jacson-Telles.webp" },
-  { name: "João Grassini", file: "Joao-Grassini.webp" },
-  { name: "Lennon Bandeira", file: "Lennon-Bandeira.webp" },
-  { name: "Leonardo Maciel", file: "Leonardo-Maciel.webp" },
-  { name: "Lucas Machado", file: "Lucas-Machado.png" },
-  { name: "Luciano Crusius", file: "Luciano-Crusius.webp" },
-  { name: "Luiz Felipe de Souza", file: "Luiz-Felipe-de-Souza.png" },
-  { name: "Marcellus Schneider", file: "Marcellus-Schneider.webp" },
-  { name: "Marcelo Barros", file: "Marcelo-Barros.webp" },
-  { name: "Mateus Scheunemann", file: "Mateus-Scheunemann.webp" },
-  { name: "Matheus Alquati", file: "Matheus-Alquati.webp" },
-  { name: "Matheus Gusi", file: "Matheus-Gusi-3.png" },
-  { name: "Natália Petry", file: "Natalia-Petry.webp" },
-  { name: "Nicolas Paes", file: "Nicolas-Paes.webp" },
-  { name: "Pedro Streck", file: "Pedro-Streck.webp" },
-  { name: "Roberto Albrecht", file: "Roberto-Albrecht.webp" },
-  { name: "Sílvio Filho", file: "Silvio-Filho.webp" },
-  { name: "Tales Jost", file: "Tales-Jost.webp" },
-  { name: "Tiago Corte", file: "Tiago-Corte.webp" },
-  { name: "Uriel Viegas", file: "uriel-viegas.webp" },
-  { name: "Vinícius Crizel", file: "Vinicius-Crizel.webp" },
-  { name: "Vinícius Ferreira", file: "Vinicius-ferreira.webp" },
-];
+import { SEO } from "@/components/SEO";
+import { supabase, type Assessor } from "@/lib/supabase";
 
 export default function Assessores() {
   useScrollAnimation();
 
+  const { data: assessores = [], isLoading } = useQuery({
+    queryKey: ['assessores'],
+    queryFn: async (): Promise<Assessor[]> => {
+      const { data, error } = await supabase
+        .from('assessores')
+        .select('*')
+        .order('order_index', { ascending: true })
+      if (error) throw error
+      return data
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   return (
     <>
+      <SEO
+        title="Assessores de Investimentos Joinville | Marco XP"
+        description="Conheça os assessores de investimentos da Marco em Joinville. Especialistas em planejamento financeiro para médicos, empresários e profissionais liberais."
+        canonical="/assessores"
+      />
       <Header />
 
       {/* Hero */}
@@ -89,9 +61,17 @@ export default function Assessores() {
       <section className="bg-black-deep py-[100px]">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+            {isLoading &&
+              Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl bg-white-soft/5 animate-pulse"
+                  style={{ aspectRatio: "3 / 4" }}
+                />
+              ))}
             {assessores.map((assessor, i) => (
               <div
-                key={assessor.file}
+                key={assessor.id}
                 data-animate
                 className="group relative overflow-hidden rounded-xl"
                 style={{
@@ -100,12 +80,14 @@ export default function Assessores() {
                 }}
               >
                 {/* Foto */}
+                {assessor.image_url && (
                 <img
-                  src={`/images/assessores/${assessor.file}`}
+                  src={assessor.image_url}
                   alt={assessor.name}
                   className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
+                )}
 
                 {/* CEO badge */}
                 {assessor.role && (

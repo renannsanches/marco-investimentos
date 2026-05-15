@@ -22,7 +22,6 @@ export default function Footer() {
     {
       title: "LGPD",
       links: [
-        { label: "Portal da Privacidade", href: "#" },
         { label: "Política de Privacidade e Proteção de Dados Pessoais", href: "/lgpd/politica-de-privacidade" },
         { label: "Política de Cookies", href: "/lgpd/politica-de-cookies" },
       ],

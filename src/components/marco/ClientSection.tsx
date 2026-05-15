@@ -1,4 +1,5 @@
 import type React from "react";
+import { Link } from "react-router-dom";
 
 export default function ClientSection() {
   const images = [
@@ -42,14 +43,14 @@ export default function ClientSection() {
             de todo o nosso trabalho
           </h2>
 
-          <a
-            href="#solucoes"
+          <Link
+            to="/solucoes/investimentos"
             data-animate
             className="inline-flex items-center gap-2 font-body font-semibold text-sm text-white bg-gold rounded-full px-8 py-3 hover:brightness-110 transition-all duration-[250ms] ease group"
           >
             conheça nossas soluções
             <span className="transition-transform duration-[250ms] ease group-hover:translate-x-1">→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

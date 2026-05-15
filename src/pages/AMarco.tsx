@@ -3,6 +3,7 @@ import Footer from "@/components/marco/Footer";
 import CtaFinal from "@/components/marco/CtaFinal";
 import PageHero from "@/components/marco/PageHero";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 const pillars = [
   {
@@ -41,6 +42,11 @@ export default function AMarco() {
 
   return (
     <>
+      <SEO
+        title="Sobre a Marco | Escritório de Investimentos Joinville"
+        description="Conheça a Marco Investimentos em Joinville. Especialistas em gestão de patrimônio, credibilidade e cuidado com seu futuro financeiro."
+        canonical="/sobre/a-marco"
+      />
       <Header />
 
       {/* Hero */}

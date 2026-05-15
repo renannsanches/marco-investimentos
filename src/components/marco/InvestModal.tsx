@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useRDStation } from "@/hooks/useRDStation";
 
@@ -44,6 +45,12 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
     privacidade: false,
   });
 
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   if (!open) return null;
 
   const handleChange = (field: string, value: string | boolean) => {
@@ -86,19 +93,22 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
   const selectClass =
     "w-full appearance-none bg-white/10 border border-white/20 rounded-xl px-4 py-3 font-body text-sm text-white outline-none focus:ring-2 focus:ring-[#C2A161]/70 focus:border-[#C2A161]/50 transition cursor-pointer backdrop-blur-sm";
 
-  return (
+  return createPortal(
     <>
       <style>{`
         .invest-modal-select option { background-color: #1a1a1a; color: white; }
         .invest-modal-select option:disabled { color: rgba(255,255,255,0.4); }
+        .invest-modal-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+        .invest-modal-scroll::-webkit-scrollbar { display: none; }
       `}</style>
 
       <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" role="dialog" aria-modal="true">
         <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={handleClose} />
 
         <div
-          className="relative z-10 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl"
+          className="relative z-10 w-full max-w-md rounded-2xl overflow-y-auto shadow-2xl invest-modal-scroll"
           style={{
+            maxHeight: "90vh",
             background: "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%)",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
@@ -215,6 +225,7 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }

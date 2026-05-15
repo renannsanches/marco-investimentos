@@ -3,6 +3,7 @@ import Footer from "@/components/marco/Footer";
 import CtaFinal from "@/components/marco/CtaFinal";
 import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 const objectives = [
   {
@@ -148,6 +149,11 @@ export default function Investimentos() {
 
   return (
     <>
+      <SEO
+        title="Soluções em Investimentos Joinville | XP Investimentos"
+        description="Renda Fixa, Ações, Fundos, FII e Previdência Privada em Joinville. Assessoria de investimentos fee based com a Marco XP Investimentos."
+        canonical="/solucoes/investimentos"
+      />
       <Header />
 
       {/* Hero */}
@@ -171,7 +177,7 @@ export default function Investimentos() {
               <span className="text-gold">investimentos</span>
             </h1>
             <p className="font-body text-lg text-white-soft/70 leading-relaxed max-w-[580px] animate-fade-in-up animate-delay-300">
-              <strong className="text-white-soft">MARCO</strong> Investimentos ajudamos você nas decisões
+              Na <strong className="text-white-soft">MARCO</strong> Investimentos ajudamos você nas decisões
               relacionadas aos seus investimentos, sempre de acordo com seus objetivos e perfil.
             </p>
           </div>

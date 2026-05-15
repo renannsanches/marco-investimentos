@@ -4,6 +4,7 @@ import Header from "@/components/marco/Header";
 import Footer from "@/components/marco/Footer";
 import PageHero from "@/components/marco/PageHero";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 const CUSTODIA_OPTIONS = [
   "0M → 10M",
@@ -91,6 +92,11 @@ export default function Carreiras() {
         }
       `}</style>
 
+      <SEO
+        title="Trabalhe Conosco | Marco Investimentos Joinville"
+        description="Faça parte da Marco Investimentos em Joinville, SC. Oportunidades para assessores e profissionais do mercado financeiro."
+        canonical="/sobre/carreiras"
+      />
       <Header />
 
       {/* Hero */}

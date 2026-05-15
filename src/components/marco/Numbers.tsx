@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useCountUp } from "@/hooks/useCountUp";
+import ContactModal from "./Contactmodal";
 
 function SmallStat({ end, prefix = "", suffix = "", label }: { end: number; prefix?: string; suffix?: string; label: string }) {
   const { count, ref } = useCountUp(end);
@@ -52,6 +54,8 @@ function MiniChart() {
 }
 
 export default function Numbers() {
+  const [contactOpen, setContactOpen] = useState(false);
+
   return (
     <section className="relative py-20 numbers-section" id="numeros">
       <div className="relative container mx-auto px-4">
@@ -63,15 +67,15 @@ export default function Numbers() {
               Resultados que<br />falam por si
             </h2>
             <p className="font-body text-white-soft/60 text-base max-w-sm leading-relaxed">
-              Mais de 10 anos de experiência, +R$2 bilhões sob custódia, 52 assessores dedicados e clientes em todo o Brasil.
+              Mais de 10 anos de experiência, +R$3 bilhões sob custódia, 60 especialistas dedicados e clientes em todo o Brasil.
             </p>
             <div>
-              <a
-                href="#contato"
+              <button
+                onClick={() => setContactOpen(true)}
                 className="inline-flex items-center gap-2 font-body font-medium text-sm bg-gold text-dark-grey px-5 py-3 rounded-full hover:bg-white-soft hover:text-dark-grey transition-colors"
               >
                 Fale com um assessor <span>›</span>
-              </a>
+              </button>
             </div>
             <div className="mt-1">
               <MiniChart />
@@ -82,20 +86,22 @@ export default function Numbers() {
           <div className="flex flex-col gap-10">
             {/* Big stat */}
             <div className="border-b border-white/10 pb-8">
-              <BigStat end={3} prefix="+R$" suffix="B" label="Mais de R$ 2 Bilhões de reais sob custódia" />
+              <BigStat end={3} prefix="+R$" suffix="B" label="Mais de R$ 3 Bilhões de reais sob custódia" />
             </div>
 
             {/* Small stats grid */}
             <div className="grid grid-cols-2 gap-8">
-              <SmallStat end={10000} prefix="+" label="Clientes satisfeitos" />
-              <SmallStat end={52} label="Assessores" />
-              <SmallStat end={5} label="Sedes" />
               <SmallStat end={10} prefix="+" suffix=" anos" label="de experiência" />
+              <SmallStat end={60} label="Especialistas" />
+              <SmallStat end={8} label="Sedes" />
+              <SmallStat end={6500} prefix="+" label="clientes ativos" />
             </div>
           </div>
 
         </div>
       </div>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </section>
   );
 }

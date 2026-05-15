@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useRDStation } from "@/hooks/useRDStation";
 
@@ -74,7 +75,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
   const labelClass = "font-body text-xs text-white/55 uppercase tracking-wider";
 
-  return (
+  return createPortal(
     <>
       <style>{`
         @media (max-width: 640px) { .contact-modal-image { display: none; } }
@@ -183,6 +184,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }

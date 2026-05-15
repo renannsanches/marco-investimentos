@@ -1,9 +1,20 @@
-import { useState } from "react";
-import InvestModal from "./InvestModal";
+import { useState, useEffect } from "react";
+import ContactModal from "./Contactmodal";
 
 export default function Hero() {
-  // Estado seguindo o mesmo padrão do Header
   const [modalOpen, setModalOpen] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
+    if (document.readyState === "complete") {
+      setShowVideo(true);
+    } else {
+      const onLoad = () => setShowVideo(true);
+      window.addEventListener("load", onLoad, { once: true });
+      return () => window.removeEventListener("load", onLoad);
+    }
+  }, []);
 
   const scrollToAbout = () => {
     const el = document.querySelector("#sobre");
@@ -15,17 +26,19 @@ export default function Hero() {
 
   return (
     <section className="relative w-full min-h-screen flex items-center overflow-hidden" id="inicio">
-      {/* YouTube video background */}
-      <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
-        <iframe
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-screen min-w-[177.78vh]" 
-          src="https://www.youtube.com/embed/SAWlqWS6sCE?autoplay=1&mute=1&loop=1&playlist=SAWlqWS6sCE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"          
-          title="Marco Investimentos"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-      </div>
+      {/* YouTube video background — only injected on desktop after page load */}
+      {showVideo && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <iframe
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-screen min-w-[177.78vh]"
+            src="https://www.youtube.com/embed/SAWlqWS6sCE?autoplay=1&mute=1&loop=1&playlist=SAWlqWS6sCE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+            title="Marco Investimentos"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+        </div>
+      )}
 
       {/* Mobile fallback bg */}
       <div className="absolute inset-0 z-0 bg-dark-grey md:hidden" />
@@ -40,7 +53,7 @@ export default function Hero() {
       <div className="relative z-[3] container mx-auto py-40 md:py-0">
         <div className="max-w-[680px]">
           <p className="font-body text-sm tracking-widest uppercase text-oatmeal mb-6 animate-fade-in-up">
-            Consultório Financeiro · Parceiro XP Investimentos
+            Parceiro XP Investimentos
           </p>
 
           <h1 className="font-heading font-semibold text-white-soft leading-tight mb-6 animate-fade-in-up animate-delay-150"
@@ -72,7 +85,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <InvestModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ContactModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </section>
   );
 }

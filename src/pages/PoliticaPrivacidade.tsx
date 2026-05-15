@@ -1,6 +1,7 @@
 import Header from "@/components/marco/Header";
 import Footer from "@/components/marco/Footer";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -49,6 +50,11 @@ export default function PoliticaPrivacidade() {
 
   return (
     <>
+      <SEO
+        title="Política de Privacidade | Marco Investimentos"
+        description="Política de Privacidade da Marco Investimentos. Saiba como tratamos seus dados pessoais."
+        canonical="/lgpd/politica-de-privacidade"
+      />
       <Header />
 
       {/* Hero */}

@@ -4,6 +4,7 @@ import Footer from "@/components/marco/Footer";
 import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useRDStation } from "@/hooks/useRDStation";
+import { SEO } from "@/components/SEO";
 
 function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
@@ -65,6 +66,11 @@ export default function Contato() {
 
   return (
     <>
+      <SEO
+        title="Fale com Nossos Assessores | Marco Investimentos Joinville"
+        description="Entre em contato com a Marco Investimentos em Joinville, SC. WhatsApp, e-mail e escritórios disponíveis para você."
+        canonical="/contato"
+      />
       <Header />
 
       {/* Hero */}
@@ -127,7 +133,7 @@ export default function Contato() {
                       </svg>
                     ),
                     label: "Sede",
-                    value: "Blumenau, SC — Brasil",
+                    value: "Joinville, SC — Brasil",
                     href: null,
                   },
                 ].map((item) => (

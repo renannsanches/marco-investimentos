@@ -3,6 +3,7 @@ import Footer from "@/components/marco/Footer";
 import CtaFinal from "@/components/marco/CtaFinal";
 import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 const products = [
   {
@@ -115,6 +116,11 @@ export default function Corporativas() {
 
   return (
     <>
+      <SEO
+        title="Soluções Corporativas Joinville | Holding e Crédito"
+        description="Planejamento tributário, holding patrimonial, câmbio e crédito para empresas em Joinville e SC. Marco Investimentos Corporativas."
+        canonical="/solucoes/corporativas"
+      />
       <Header />
 
       {/* Hero */}

@@ -1,19 +1,28 @@
+import { lazy, Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import AMarco from "./pages/AMarco.tsx";
-import NossosEscritorios from "./pages/NossosEscritorios.tsx";
-import Carreiras from "./pages/Carreiras.tsx";
-import Investimentos from "./pages/Investimentos.tsx";
-import Corporativas from "./pages/Corporativas.tsx";
-import Assessores from "./pages/Assessores.tsx";
-import Contato from "./pages/Contato.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import PoliticaPrivacidade from "./pages/PoliticaPrivacidade.tsx";
-import PoliticaCookies from "./pages/PoliticaCookies.tsx";
+
+const Index = lazy(() => import("./pages/Index.tsx"));
+const AMarco = lazy(() => import("./pages/AMarco.tsx"));
+const NossosEscritorios = lazy(() => import("./pages/NossosEscritorios.tsx"));
+const Carreiras = lazy(() => import("./pages/Carreiras.tsx"));
+const Investimentos = lazy(() => import("./pages/Investimentos.tsx"));
+const Corporativas = lazy(() => import("./pages/Corporativas.tsx"));
+const Assessores = lazy(() => import("./pages/Assessores.tsx"));
+const Contato = lazy(() => import("./pages/Contato.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const PoliticaPrivacidade = lazy(() => import("./pages/PoliticaPrivacidade.tsx"));
+const PoliticaCookies = lazy(() => import("./pages/PoliticaCookies.tsx"));
+const Admin = lazy(() => import("./pages/Admin.tsx"));
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 
 const queryClient = new QueryClient();
 
@@ -23,20 +32,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/sobre/a-marco" element={<AMarco />} />
-          <Route path="/sobre/nossos-escritorios" element={<NossosEscritorios />} />
-          <Route path="/sobre/carreiras" element={<Carreiras />} />
-          <Route path="/solucoes/investimentos" element={<Investimentos />} />
-          <Route path="/solucoes/corporativas" element={<Corporativas />} />
-          <Route path="/assessores" element={<Assessores />} />
-          <Route path="/contato" element={<Contato />} />
-          <Route path="/lgpd/politica-de-privacidade" element={<PoliticaPrivacidade />} />
-          <Route path="/lgpd/politica-de-cookies" element={<PoliticaCookies />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <ScrollToTop />
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/sobre/a-marco" element={<AMarco />} />
+            <Route path="/sobre/nossos-escritorios" element={<NossosEscritorios />} />
+            <Route path="/sobre/carreiras" element={<Carreiras />} />
+            <Route path="/solucoes/investimentos" element={<Investimentos />} />
+            <Route path="/solucoes/corporativas" element={<Corporativas />} />
+            <Route path="/assessores" element={<Assessores />} />
+            <Route path="/contato" element={<Contato />} />
+            <Route path="/lgpd/politica-de-privacidade" element={<PoliticaPrivacidade />} />
+            <Route path="/lgpd/politica-de-cookies" element={<PoliticaCookies />} />
+            <Route path="/admin" element={<Admin />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
 
       {/* WhatsApp floating button */}

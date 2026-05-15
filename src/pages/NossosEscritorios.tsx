@@ -3,6 +3,7 @@ import Footer from "@/components/marco/Footer";
 import CtaFinal from "@/components/marco/CtaFinal";
 import PageHero from "@/components/marco/PageHero";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { SEO } from "@/components/SEO";
 
 const estados = [
   {
@@ -40,7 +41,7 @@ const estados = [
     sigla: "SC",
     escritorios: [
       {
-        cidade: "Joinville",
+        cidade: "Blumenau",
         endereco: "Rua Ministro Calógeras, 343",
         complemento: "Andar 11 – Centro",
         cep: "CEP: 89202-207",
@@ -65,6 +66,11 @@ export default function NossosEscritorios() {
 
   return (
     <>
+      <SEO
+        title="Nossos Escritórios | Marco Investimentos SC e Brasil"
+        description="Marco Investimentos com escritórios em Joinville, Santa Catarina e todo o Brasil. Encontre o assessor mais próximo de você."
+        canonical="/sobre/nossos-escritorios"
+      />
       <Header />
 
       {/* Hero */}

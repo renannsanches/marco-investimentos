@@ -1,4 +1,9 @@
+import { useState } from "react";
+import ContactModal from "./Contactmodal";
+
 export default function Credibility() {
+  const [contactOpen, setContactOpen] = useState(false);
+
   return (
     <section className="relative py-[120px] overflow-hidden" id="sobre">
       <video
@@ -40,11 +45,16 @@ export default function Credibility() {
             elimina qualquer conflito de interesse.
           </p>
 
-          <button className="px-8 py-3 bg-gold text-black font-body font-semibold text-base rounded-[4px] hover:bg-gold/85 transition-colors">
+          <button
+            onClick={() => setContactOpen(true)}
+            className="px-8 py-3 bg-gold text-black font-body font-semibold text-base rounded-[4px] hover:bg-gold/85 transition-colors"
+          >
             Falar com um especialista
           </button>
         </div>
       </div>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </section>
   );
 }
