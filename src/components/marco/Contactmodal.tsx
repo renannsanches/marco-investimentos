@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { useRDStation } from "@/hooks/useRDStation";
+
+// Chave de teste oficial Cloudflare em dev (sempre passa, sem validação real)
+const TURNSTILE_SITE_KEY = import.meta.env.DEV
+  ? "1x00000000000000000000AA"
+  : "0x4AAAAAADQDV0yaN25xyX3z";
 
 interface ContactModalProps {
   open: boolean;
@@ -26,6 +32,8 @@ function applyPhoneMask(value: string): string {
 export default function ContactModal({ open, onClose }: ContactModalProps) {
   const { submit, loading } = useRDStation();
   const [sent, setSent] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     nome: "",
@@ -48,6 +56,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
   const resetForm = () => {
     setForm({ nome: "", whatsapp: "", email: "", mensagem: "", comunicacoes: false });
     setSent(false);
+    setTurnstileToken(null);
   };
 
   const handleClose = () => {
@@ -65,9 +74,14 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       mobile_phone: form.whatsapp,
       cf_mensagem: form.mensagem,
       cf_aceita_comunicacoes: form.comunicacoes ? "sim" : "nao",
+      "cf-turnstile-response": turnstileToken ?? "",
     });
 
-    if (ok) setSent(true);
+    if (ok) {
+      setSent(true);
+      setCooldown(true);
+      setTimeout(() => setCooldown(false), 30000);
+    }
   };
 
   const inputClass =
@@ -133,13 +147,13 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                 </div>
               ) : (
                 <>
-                  <h2 className="font-heading text-xl font-bold text-white mb-1">Fale conosco:</h2>
+                  <h2 className="font-heading text-xl font-bold text-white mb-1">Fale Conosco</h2>
                   <div className="h-px w-full mb-5" style={{ background: "linear-gradient(90deg, rgba(194,161,97,0.6), transparent)" }} />
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>Nome</label>
-                      <input type="text" placeholder="Nome Sobrenome" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
+                      <input type="text" placeholder="Nome Completo" value={form.nome} onChange={(e) => handleChange("nome", e.target.value)} required className={inputClass} />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -154,7 +168,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>Escreva a sua mensagem</label>
-                      <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={4} className={`${inputClass} resize-none`} />
+                      <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={4} maxLength={2000} className={`${inputClass} resize-none`} />
                     </div>
 
                     <label className="flex items-start gap-3 cursor-pointer group mt-1">
@@ -169,13 +183,21 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                       <span className="font-body text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">Eu concordo em receber comunicações.</span>
                     </label>
 
+                    <Turnstile
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onSuccess={setTurnstileToken}
+                      onExpire={() => setTurnstileToken(null)}
+                      onError={() => setTurnstileToken(null)}
+                      options={{ theme: "dark", size: "flexible" }}
+                    />
+
                     <button
                       type="submit"
-                      disabled={loading}
+                      disabled={loading || cooldown || !turnstileToken}
                       className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                       style={{ background: "linear-gradient(135deg, #C2A161, #a8884d)", color: "white", boxShadow: "0 4px 20px rgba(194,161,97,0.35)", cursor: "pointer" }}
                     >
-                      {loading ? "Enviando..." : "Enviar mensagem"}
+                      {loading ? "Enviando..." : cooldown ? "Mensagem enviada" : "Enviar mensagem"}
                     </button>
                   </form>
                 </>

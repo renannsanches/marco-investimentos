@@ -94,10 +94,10 @@ export default function Footer() {
         {/* Divider */}
         <div className="border-t border-gold/20 pt-6">
           <p className="font-body text-xs text-oatmeal/60 mb-4">
-            © 2025, Marco Investimentos. Todos os direitos reservados. | 32.383.761/0001-86 – Marco Assessor de Investimentos LTDA
+            © 2025, Marco Investimentos. Todos os direitos reservados. | 32.383.761/0001-66 – Marco Assessor de Investimentos LTDA
           </p>
           <p className="font-body text-[11px] text-oatmeal/40 leading-relaxed max-w-4xl">
-            A MARCO ASSESSOR DE INVESTIMENTOS LTDA, inscrita sob o CNPJ: 32.383.761/0001-86 é uma empresa Assessora de
+            A MARCO ASSESSOR DE INVESTIMENTOS LTDA, inscrita sob o CNPJ: 32.383.761/0001-66 é uma empresa Assessora de
             Investimento devidamente registrada na Comissão de Valores Mobiliários ("CVM") na forma da Resolução CVM 178/23
             ("Resolução"), que mantém contrato de distribuição de produtos financeiros com a XP Investimentos Corretora de
             Títulos, Valores e Mobiliários S.A. ("XP") e pode, por conta e ordem dos seus clientes, operar no mercado

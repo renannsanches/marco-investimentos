@@ -5,6 +5,11 @@ import CarouselBg from "@/components/marco/CarouselBg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useRDStation } from "@/hooks/useRDStation";
 import { SEO } from "@/components/SEO";
+import { Turnstile } from "@marsidev/react-turnstile";
+
+const TURNSTILE_SITE_KEY = import.meta.env.DEV
+  ? "1x00000000000000000000AA"
+  : "0x4AAAAAADQDV0yaN25xyX3z";
 
 function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, "");
@@ -31,6 +36,8 @@ function CheckIcon() {
 export default function Contato() {
   useScrollAnimation();
   const { submit, loading } = useRDStation();
+  const [cooldown, setCooldown] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     nome: "",
@@ -53,15 +60,20 @@ export default function Contato() {
     e.preventDefault();
 
     const ok = await submit({
-      identifier: "site-pagina-contato",   // aparece assim no RD Marketing
+      identifier: "site-pagina-contato",
       name: form.nome,
       email: form.email,
       mobile_phone: form.celular,
       cf_mensagem: form.mensagem,
       cf_aceita_comunicacoes: form.comunicacoes ? "sim" : "nao",
+      "cf-turnstile-response": turnstileToken ?? "",
     });
 
-    if (ok) setSent(true);
+    if (ok) {
+      setSent(true);
+      setCooldown(true);
+      setTimeout(() => setCooldown(false), 30000);
+    }
   };
 
   return (
@@ -206,7 +218,7 @@ export default function Contato() {
 
                       <div className="flex flex-col gap-2">
                         <label className={labelClass}>Mensagem</label>
-                        <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={5} className={`${inputClass} resize-none`} />
+                        <textarea placeholder="Como podemos ajudar você?" value={form.mensagem} onChange={(e) => handleChange("mensagem", e.target.value)} required rows={5} maxLength={2000} className={`${inputClass} resize-none`} />
                       </div>
 
                       <label className="flex items-start gap-3 cursor-pointer group mt-1">
@@ -219,13 +231,21 @@ export default function Contato() {
                         <span className="font-body text-xs text-white-soft/45 leading-relaxed group-hover:text-white-soft/65 transition-colors">Eu concordo em receber comunicações.</span>
                       </label>
 
+                      <Turnstile
+                        siteKey={TURNSTILE_SITE_KEY}
+                        onSuccess={setTurnstileToken}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => setTurnstileToken(null)}
+                        options={{ theme: "dark", size: "flexible" }}
+                      />
+
                       <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || cooldown || !turnstileToken}
                         className="mt-1 w-full font-body font-semibold text-sm py-4 rounded-xl transition-all duration-200 hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                         style={{ background: "linear-gradient(135deg, #C9A84C, #a8884d)", color: "white", boxShadow: "0 4px 24px rgba(201,168,76,0.30)" }}
                       >
-                        {loading ? "Enviando..." : "Enviar mensagem"}
+                        {loading ? "Enviando..." : cooldown ? "Mensagem enviada" : "Enviar mensagem"}
                       </button>
                     </form>
                   )}

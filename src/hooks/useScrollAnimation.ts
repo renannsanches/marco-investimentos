@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export function useScrollAnimation() {
+export function useScrollAnimation(deps: unknown[] = []) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -18,5 +18,6 @@ export function useScrollAnimation() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
 }

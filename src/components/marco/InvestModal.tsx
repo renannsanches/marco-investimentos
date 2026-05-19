@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { useRDStation } from "@/hooks/useRDStation";
+
+const TURNSTILE_SITE_KEY = import.meta.env.DEV
+  ? "1x00000000000000000000AA"
+  : "0x4AAAAAADQDV0yaN25xyX3z";
 
 interface InvestModalProps {
   open: boolean;
@@ -35,6 +40,8 @@ function applyPhoneMask(value: string): string {
 export default function InvestModal({ open, onClose }: InvestModalProps) {
   const { submit, loading } = useRDStation();
   const [sent, setSent] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     nome: "",
@@ -64,6 +71,7 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
   const resetForm = () => {
     setForm({ nome: "", email: "", telefone: "", investimento: "", contato: "", privacidade: false });
     setSent(false);
+    setTurnstileToken(null);
   };
 
   const handleClose = () => {
@@ -82,9 +90,14 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
       mobile_phone: form.telefone,
       cf_patrimonio_investimento: form.investimento,
       cf_canal_preferido: form.contato,
+      "cf-turnstile-response": turnstileToken ?? "",
     });
 
-    if (ok) setSent(true);
+    if (ok) {
+      setSent(true);
+      setCooldown(true);
+      setTimeout(() => setCooldown(false), 30000);
+    }
   };
 
   const inputClass =
@@ -206,18 +219,26 @@ export default function InvestModal({ open, onClose }: InvestModalProps) {
                     </span>
                   </label>
 
+                  <Turnstile
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={setTurnstileToken}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                    options={{ theme: "dark", size: "flexible" }}
+                  />
+
                   <button
                     type="submit"
-                    disabled={!form.privacidade || loading}
+                    disabled={!form.privacidade || loading || cooldown || !turnstileToken}
                     className="mt-2 w-full font-body font-semibold text-sm py-3.5 rounded-xl transition-all duration-200"
                     style={{
-                      background: form.privacidade ? "linear-gradient(135deg, #C2A161, #a8884d)" : "rgba(255,255,255,0.1)",
-                      color: form.privacidade ? "white" : "rgba(255,255,255,0.3)",
-                      cursor: form.privacidade && !loading ? "pointer" : "not-allowed",
+                      background: form.privacidade && !cooldown && turnstileToken ? "linear-gradient(135deg, #C2A161, #a8884d)" : "rgba(255,255,255,0.1)",
+                      color: form.privacidade && !cooldown && turnstileToken ? "white" : "rgba(255,255,255,0.3)",
+                      cursor: form.privacidade && !loading && !cooldown && turnstileToken ? "pointer" : "not-allowed",
                       boxShadow: form.privacidade ? "0 4px 20px rgba(194,161,97,0.35)" : "none",
                     }}
                   >
-                    {loading ? "Enviando..." : "Investir com a Marco"}
+                    {loading ? "Enviando..." : cooldown ? "Enviado!" : "Investir com a Marco"}
                   </button>
                 </form>
               </>

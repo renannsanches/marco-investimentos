@@ -63,13 +63,30 @@ export default function AssessorForm({ open, onClose, assessor }: Props) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    const MAX_SIZE_MB = 5
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      toast.error('Formato inválido. Use JPG, PNG, WebP ou GIF.')
+      e.target.value = ''
+      return
+    }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      toast.error(`Arquivo muito grande. Máximo ${MAX_SIZE_MB}MB.`)
+      e.target.value = ''
+      return
+    }
+
     setImageFile(file)
     if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview)
     setImagePreview(URL.createObjectURL(file))
   }
 
   const uploadImage = async (file: File): Promise<string> => {
-    const ext = file.name.split('.').pop() ?? 'webp'
+    const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif']
+    const rawExt = file.name.split('.').pop()?.toLowerCase() ?? ''
+    const ext = ALLOWED_EXTENSIONS.includes(rawExt) ? rawExt : 'webp'
     const filename = `${Date.now()}-${crypto.randomUUID()}.${ext}`
     const { error } = await supabase.storage
       .from('assessores-images')

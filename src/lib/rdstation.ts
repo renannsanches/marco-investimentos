@@ -1,3 +1,6 @@
+const RD_ENDPOINT =
+  `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rd-conversion`
+
 export interface RDConversionPayload {
   identifier: string;
   name: string;
@@ -17,11 +20,12 @@ export async function sendRDConversion(payload: RDConversionPayload): Promise<vo
     ...buildCustomFields(rest),
   };
 
-  body.token_rdstation = "0b583302870eae833530cf0a4bbf7103";
-
-  const res = await fetch("https://www.rdstation.com.br/api/1.3/conversions", {
+  const res = await fetch(RD_ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+    },
     body: JSON.stringify(body),
   });
 

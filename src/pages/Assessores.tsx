@@ -8,8 +8,6 @@ import { SEO } from "@/components/SEO";
 import { supabase, type Assessor } from "@/lib/supabase";
 
 export default function Assessores() {
-  useScrollAnimation();
-
   const { data: assessores = [], isLoading } = useQuery({
     queryKey: ['assessores'],
     queryFn: async (): Promise<Assessor[]> => {
@@ -22,6 +20,8 @@ export default function Assessores() {
     },
     staleTime: 5 * 60 * 1000,
   });
+
+  useScrollAnimation([assessores.length]);
 
   return (
     <>
